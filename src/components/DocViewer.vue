@@ -5,19 +5,7 @@
 </template>
 
 <script>
-let pdfjs = null
-
-import('pdfjs-dist/webpack')
-    .then(pdfjslib => {
-        pdfjs = pdfjslib
-    })
-
-let pdfjsViewer = null
-
-import ('pdfjs-dist/web/pdf_viewer')
-    .then(pdfjsViewerLib => {
-        pdfjsViewer = pdfjsViewerLib
-    })
+// import range from 'lodash/range'
 
 export default {
     name: 'DocViewer',
@@ -28,8 +16,31 @@ export default {
 
     data () {
         return {
-            pdfjs: pdfjs,
-            pdfjsViewer: pdfjsViewer
+            pdfjsLocal: null,
+            pdfjsViewerLocal: null,
+
+            pdfDoc: null,
+            pages: []
+        }
+    },
+
+    async created () {
+        await this.fetchLibraries()
+        await this.fetchPdf()
+    },
+
+    methods: {
+        async fetchLibraries () {
+            const pdfjs = await import('pdfjs-dist/webpack')
+            this.pdfjsLocal = pdfjs
+            const pdfjsViewer = await import('pdfjs-dist/web/pdf_viewer')
+            this.pdfjsViewerLocal = pdfjsViewer
+        },
+
+        async fetchPdf () {
+            const pdfLoadingTask = await this.pdfjsLocal.getDocument(this.url)
+            this.pdfDoc = await pdfLoadingTask.promise
+            console.dir(this.pdfDoc)
         }
     }
 }

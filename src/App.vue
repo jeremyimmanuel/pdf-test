@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <doc-viewer 
-      url="http://africau.edu/images/default/sample.pdf"
+    <doc-viewer
+      url="file:///home/jeremy/Desktop/pdf/RSbook_ch3.pdf"
     />
   </div>
 </template>
